@@ -8,19 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		070281E721EA54FE001F0BB8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070281E621EA54FE001F0BB8 /* AppDelegate.swift */; };
-		070281E921EA54FE001F0BB8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070281E821EA54FE001F0BB8 /* ViewController.swift */; };
+		070281E921EA54FE001F0BB8 /* JSONItemController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 070281E821EA54FE001F0BB8 /* JSONItemController.swift */; };
 		070281EE21EA5503001F0BB8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 070281ED21EA5503001F0BB8 /* Assets.xcassets */; };
 		070281F121EA5503001F0BB8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 070281EF21EA5503001F0BB8 /* LaunchScreen.storyboard */; };
+		07B2099521EA612900F7777A /* JSONItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B2099421EA612900F7777A /* JSONItem.swift */; };
 		7A77050ACF903BE4048FDFFD /* Pods_AxxessCodingChallenge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94E07FEB31EE040DA4321C3B /* Pods_AxxessCodingChallenge.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		070281E321EA54FE001F0BB8 /* AxxessCodingChallenge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AxxessCodingChallenge.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		070281E621EA54FE001F0BB8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		070281E821EA54FE001F0BB8 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		070281E821EA54FE001F0BB8 /* JSONItemController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONItemController.swift; sourceTree = "<group>"; };
 		070281ED21EA5503001F0BB8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		070281F021EA5503001F0BB8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		070281F221EA5503001F0BB8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		07B2099421EA612900F7777A /* JSONItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONItem.swift; sourceTree = "<group>"; };
 		0F2188310E4A2869727DC324 /* Pods-AxxessCodingChallenge.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AxxessCodingChallenge.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AxxessCodingChallenge/Pods-AxxessCodingChallenge.debug.xcconfig"; sourceTree = "<group>"; };
 		94E07FEB31EE040DA4321C3B /* Pods_AxxessCodingChallenge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AxxessCodingChallenge.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDF63DE9551E795078FD4EFE /* Pods-AxxessCodingChallenge.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AxxessCodingChallenge.release.xcconfig"; path = "Pods/Target Support Files/Pods-AxxessCodingChallenge/Pods-AxxessCodingChallenge.release.xcconfig"; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 		07B2098D21EA56F200F7777A /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				07B2099421EA612900F7777A /* JSONItem.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -96,7 +99,7 @@
 		07B2098F21EA571100F7777A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				070281E821EA54FE001F0BB8 /* ViewController.swift */,
+				070281E821EA54FE001F0BB8 /* JSONItemController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -221,7 +224,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				070281E921EA54FE001F0BB8 /* ViewController.swift in Sources */,
+				070281E921EA54FE001F0BB8 /* JSONItemController.swift in Sources */,
+				07B2099521EA612900F7777A /* JSONItem.swift in Sources */,
 				070281E721EA54FE001F0BB8 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
