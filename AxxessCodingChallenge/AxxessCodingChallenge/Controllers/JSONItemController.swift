@@ -38,12 +38,20 @@ class JSONItemController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { (make) in
+            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading)
+            make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing)
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+        }
         view.backgroundColor = UIColor.white
         navigationItem.title = "Data"
         
         showProgressView()
         downloadJSON { [unowned self] (items) in
             self.downloadInProgressView.hideLoadingIndicator()
+            self.downloadInProgressView.removeFromSuperview()
             guard let items = items else {
                 return
             }
@@ -93,11 +101,26 @@ extension JSONItemController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JSONItemCell.identifier, for: indexPath)
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JSONItemCell.identifier, for: indexPath) as? JSONItemCell else {
+            return UICollectionViewCell()
+        }
+        
+        let item = jsonItems[indexPath.row]
+        print("Number \(indexPath.row)")
+        print(item)
+        cell.populate(item: item)
         
         return cell
     }
+}
+
+extension JSONItemController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: Constants.screenWidth, height: 120)
+    }
     
-    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+    }
 }
 
