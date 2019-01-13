@@ -10,11 +10,13 @@ import Alamofire
 
 public enum Router: URLRequestConvertible {
     enum Constants {
-        static let baseURLPath = "https://raw.githubusercontent.com/AxxessTech/Mobile-Projects/"
+        static let baseURLPath = "https://raw.githubusercontent.com/AxxessTech/Mobile-Projects"
     }
     
+    // endpoints
     case master(String)
     
+    // set the httpMethod for each endpoint
     var method: HTTPMethod {
         switch self {
         case .master:
@@ -22,6 +24,7 @@ public enum Router: URLRequestConvertible {
         }
     }
     
+    // set the path url path for each endpoint
     var path: String {
         switch self {
         case .master(let filename):
@@ -29,6 +32,7 @@ public enum Router: URLRequestConvertible {
         }
     }
     
+    // set the parameters for each endpoint
     var parameters: [String: Any] {
         switch self {
         case .master:
