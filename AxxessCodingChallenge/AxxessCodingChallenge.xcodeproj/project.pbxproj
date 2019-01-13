@@ -12,6 +12,9 @@
 		070281EE21EA5503001F0BB8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 070281ED21EA5503001F0BB8 /* Assets.xcassets */; };
 		070281F121EA5503001F0BB8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 070281EF21EA5503001F0BB8 /* LaunchScreen.storyboard */; };
 		07B2099521EA612900F7777A /* JSONItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B2099421EA612900F7777A /* JSONItem.swift */; };
+		07B2099721EA663300F7777A /* JSONItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B2099621EA663300F7777A /* JSONItemView.swift */; };
+		07B2099921EA676E00F7777A /* DownloadInProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B2099821EA676E00F7777A /* DownloadInProgressView.swift */; };
+		07BECD9621EB9739005A626C /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07BECD9521EB9739005A626C /* Router.swift */; };
 		7A77050ACF903BE4048FDFFD /* Pods_AxxessCodingChallenge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 94E07FEB31EE040DA4321C3B /* Pods_AxxessCodingChallenge.framework */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +26,9 @@
 		070281F021EA5503001F0BB8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		070281F221EA5503001F0BB8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		07B2099421EA612900F7777A /* JSONItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONItem.swift; sourceTree = "<group>"; };
+		07B2099621EA663300F7777A /* JSONItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONItemView.swift; sourceTree = "<group>"; };
+		07B2099821EA676E00F7777A /* DownloadInProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadInProgressView.swift; sourceTree = "<group>"; };
+		07BECD9521EB9739005A626C /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		0F2188310E4A2869727DC324 /* Pods-AxxessCodingChallenge.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AxxessCodingChallenge.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AxxessCodingChallenge/Pods-AxxessCodingChallenge.debug.xcconfig"; sourceTree = "<group>"; };
 		94E07FEB31EE040DA4321C3B /* Pods_AxxessCodingChallenge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AxxessCodingChallenge.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDF63DE9551E795078FD4EFE /* Pods-AxxessCodingChallenge.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AxxessCodingChallenge.release.xcconfig"; path = "Pods/Target Support Files/Pods-AxxessCodingChallenge/Pods-AxxessCodingChallenge.release.xcconfig"; sourceTree = "<group>"; };
@@ -70,6 +76,7 @@
 		070281E521EA54FE001F0BB8 /* AxxessCodingChallenge */ = {
 			isa = PBXGroup;
 			children = (
+				07B2099A21EA697B00F7777A /* Services */,
 				07B2098F21EA571100F7777A /* Controllers */,
 				07B2098E21EA570100F7777A /* Views */,
 				07B2098D21EA56F200F7777A /* Models */,
@@ -92,6 +99,8 @@
 		07B2098E21EA570100F7777A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				07B2099621EA663300F7777A /* JSONItemView.swift */,
+				07B2099821EA676E00F7777A /* DownloadInProgressView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -102,6 +111,14 @@
 				070281E821EA54FE001F0BB8 /* JSONItemController.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		07B2099A21EA697B00F7777A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				07BECD9521EB9739005A626C /* Router.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		39DBD526BAB69148637D74C3 /* Frameworks */ = {
@@ -187,11 +204,13 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-AxxessCodingChallenge/Pods-AxxessCodingChallenge-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/SVProgressHUD/SVProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SVProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -225,7 +244,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				070281E921EA54FE001F0BB8 /* JSONItemController.swift in Sources */,
+				07B2099721EA663300F7777A /* JSONItemView.swift in Sources */,
+				07B2099921EA676E00F7777A /* DownloadInProgressView.swift in Sources */,
 				07B2099521EA612900F7777A /* JSONItem.swift in Sources */,
+				07BECD9621EB9739005A626C /* Router.swift in Sources */,
 				070281E721EA54FE001F0BB8 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
