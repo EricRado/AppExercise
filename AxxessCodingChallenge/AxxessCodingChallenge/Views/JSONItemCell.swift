@@ -26,6 +26,15 @@ class JSONItemCell: UICollectionViewCell {
         return tv
     }()
     
+    private let dateTextView: UITextView = {
+        let tv = UITextView()
+        tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.font = UIFont.systemFont(ofSize: 16)
+        tv.isSelectable = false
+        tv.isScrollEnabled = false
+        return tv
+    }()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -40,11 +49,18 @@ class JSONItemCell: UICollectionViewCell {
         
         idTextView.text.removeAll()
         typeTextView.text.removeAll()
+        dateTextView.text.removeAll()
     }
     
     func populate(item: JSONItem) {
         idTextView.text = item.id
         typeTextView.text = item.type
+        
+        if let date = item.date, !date.isEmpty {
+            dateTextView.text = date
+        } else {
+            dateTextView.text = "No Date"
+        }
     }
     
     private func setupView() {
@@ -56,6 +72,7 @@ class JSONItemCell: UICollectionViewCell {
         
         contentView.addSubview(idTextView)
         contentView.addSubview(typeTextView)
+        contentView.addSubview(dateTextView)
         
         idTextView.snp.makeConstraints { (make) in
             make.leading.equalTo(contentView).offset(8)
@@ -65,6 +82,11 @@ class JSONItemCell: UICollectionViewCell {
         typeTextView.snp.makeConstraints { (make) in
             make.trailing.equalTo(contentView).offset(-8)
             make.top.equalTo(contentView).offset(8)
+        }
+        
+        dateTextView.snp.makeConstraints { (make) in
+            make.leading.equalTo(contentView).offset(8)
+            make.top.equalTo(idTextView.snp.bottom).offset(8)
         }
     }
 }
