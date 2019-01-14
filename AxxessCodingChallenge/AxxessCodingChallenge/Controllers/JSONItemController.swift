@@ -22,6 +22,11 @@ class JSONItemController: UIViewController {
         return arr
     }()
     
+    private lazy var filteredJsonItems: [JSONItem] = {
+        var arr = [JSONItem]()
+        return arr
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -34,20 +39,28 @@ class JSONItemController: UIViewController {
         cv.delegate = self
         return cv
     }()
+    
+    let searchController: UISearchController = {
+        let sc = UISearchController(searchResultsController: nil)
+        sc.obscuresBackgroundDuringPresentation = false
+        sc.searchBar.placeholder = "Search by Id"
+        return sc
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
         
-        view.addSubview(collectionView)
-        collectionView.snp.makeConstraints { (make) in
-            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading)
-            make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing)
-            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
-        }
-        view.backgroundColor = UIColor.white
-        navigationItem.title = "Data"
+        // setup search controller
+        searchController.searchResultsUpdater = self
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
         
+        // setup the scope bar
+        searchController.searchBar.scopeButtonTitles = [Constants.categoryAll, Constants.category1, Constants.category2, Constants.category3]
+        searchController.searchBar.delegate = self
+        
+        // retrieve json data from url
         showProgressView()
         downloadJSON { [unowned self] (items) in
             self.downloadInProgressView.hideLoadingIndicator()
@@ -60,6 +73,18 @@ class JSONItemController: UIViewController {
             self.collectionView.reloadData()
             print(items)
         }
+    }
+    
+    private func setupView() {
+        view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { (make) in
+            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading)
+            make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing)
+            make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+        }
+        view.backgroundColor = UIColor.white
+        navigationItem.title = "Data"
     }
     
     private func showProgressView() {
@@ -87,6 +112,32 @@ class JSONItemController: UIViewController {
             
         }
     }
+    
+    private func filterContentForSearchText(_ searchText: String,
+        scope: String=Constants.categoryAll) {
+        filteredJsonItems = jsonItems.filter({ (item: JSONItem) -> Bool in
+            let doesCategoryMatch = (scope == Constants.categoryAll) ||
+                (item.type == scope.lowercased())
+            
+            if searchBarIsEmpty() {
+                return doesCategoryMatch
+            } else {
+                return doesCategoryMatch && item.id.lowercased().contains(searchText.lowercased())
+            }
+        })
+        
+        collectionView.reloadData()
+    }
+    
+    // returns true if the text is empty or nil
+    private func searchBarIsEmpty() -> Bool {
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+    
+    private func isFiltering() -> Bool {
+        let searchBarScopeIsFiltering = searchController.searchBar.selectedScopeButtonIndex != 0
+        return searchController.isActive && (searchBarIsEmpty() || searchBarScopeIsFiltering)
+    }
 }
 
 extension JSONItemController: UICollectionViewDelegate {
@@ -96,6 +147,9 @@ extension JSONItemController: UICollectionViewDelegate {
 extension JSONItemController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
+        if isFiltering() {
+            return filteredJsonItems.count
+        }
         return jsonItems.count
     }
     
@@ -105,9 +159,13 @@ extension JSONItemController: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         
-        let item = jsonItems[indexPath.row]
-        print("Number \(indexPath.row)")
-        print(item)
+        let item: JSONItem
+        if isFiltering() {
+            item = filteredJsonItems[indexPath.row]
+        } else {
+            item = jsonItems[indexPath.row]
+        }
+        
         cell.populate(item: item)
         
         return cell
@@ -121,6 +179,22 @@ extension JSONItemController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
+    }
+}
+
+extension JSONItemController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBar = searchController.searchBar
+        let scope = searchBar.scopeButtonTitles![searchBar.selectedScopeButtonIndex]
+        filterContentForSearchText(searchController.searchBar.text!, scope: scope)
+    }
+}
+
+extension JSONItemController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        filterContentForSearchText(
+            searchBar.text!,
+            scope: searchBar.scopeButtonTitles![selectedScope])
     }
 }
 
