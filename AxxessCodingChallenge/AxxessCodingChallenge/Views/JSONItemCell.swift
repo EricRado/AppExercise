@@ -8,51 +8,54 @@
 import UIKit
 
 class JSONItemCell: UICollectionViewCell {
-    private let typeHeader: UITextView = {
-        let tv = UITextView()
-        tv.text = Constants.typeLabelTitle
-        tv.setupJSONItemTV()
-        return tv
+    // MARK: - Instance Variables
+    private let typeHeader: UILabel = {
+        let label = UILabel()
+        label.text = Constants.typeLabelTitle
+        label.font = UIFont.systemFont(ofSize: 16)
+        return label
     }()
     
-    private let dateHeader: UITextView = {
-        let tv = UITextView()
-        tv.text = Constants.dateLabelTitle
-        tv.setupJSONItemTV()
-        return tv
+    private let dateHeader: UILabel = {
+        let label = UILabel()
+        label.text = Constants.dateLabelTitle
+        label.font = UIFont.systemFont(ofSize: 16)
+        return label
     }()
     
-    private let dataHeader: UITextView = {
-        let tv = UITextView()
-        tv.text = Constants.dataLabelTitle
-        tv.setupJSONItemTV()
-        return tv
+    private let dataHeader: UILabel = {
+        let label = UILabel()
+        label.text = Constants.dataLabelTitle
+        label.font = UIFont.systemFont(ofSize: 16)
+        return label
     }()
     
-    private let idTextView: UITextView = {
-        let tv = UITextView()
-        tv.setupJSONItemTV()
-        return tv
+    private let idTextView: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        return label
     }()
     
-    private let typeTextView: UITextView = {
-        let tv = UITextView()
-        tv.setupJSONItemTV()
-        return tv
+    private let typeTextView: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        return label
     }()
     
-    private let dateTextView: UITextView = {
-        let tv = UITextView()
-        tv.setupJSONItemTV()
-        return tv
+    private let dateTextView: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        return label
     }()
     
-    private let dataTextView: UITextView = {
-        let tv = UITextView()
-        tv.setupJSONItemTV()
-        return tv
+    private let dataTextView: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.numberOfLines = 0
+        return label
     }()
     
+    // MARK: - Initilizers
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -65,10 +68,10 @@ class JSONItemCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         
-        idTextView.text.removeAll()
-        typeTextView.text.removeAll()
-        dateTextView.text.removeAll()
-        dataTextView.text.removeAll()
+        idTextView.text?.removeAll()
+        typeTextView.text?.removeAll()
+        dateTextView.text?.removeAll()
+        dataTextView.text?.removeAll()
     }
     
     func populate(item: JSONItem) {
@@ -96,7 +99,7 @@ class JSONItemCell: UICollectionViewCell {
         contentView.clipsToBounds = true
         contentView.layer.shadowColor = UIColor.gray.cgColor
         contentView.layer.shadowOffset = CGSize(width: 0.0, height: 0.0)
-        contentView.layer.shadowRadius = 4.0
+        contentView.layer.shadowRadius = 6.0
         contentView.layer.shadowOpacity = 0.7
         contentView.layer.cornerRadius = 5.0
         
@@ -109,11 +112,13 @@ class JSONItemCell: UICollectionViewCell {
         contentView.addSubview(dateTextView)
         contentView.addSubview(dataTextView)
         
+        // constraints for id
         idTextView.snp.makeConstraints { (make) in
             make.trailing.equalTo(contentView.snp.trailing).offset(-8)
             make.top.equalTo(contentView.snp.top).offset(8)
         }
         
+        // constraints for type
         typeTextView.snp.makeConstraints { (make) in
             make.trailing.equalTo(contentView.snp.trailing).offset(-8)
             make.top.equalTo(idTextView.snp.bottom).offset(8)
@@ -124,6 +129,7 @@ class JSONItemCell: UICollectionViewCell {
             make.top.equalTo(idTextView.snp.bottom).offset(8)
         }
         
+        // constraints for date
         dateHeader.snp.makeConstraints { (make) in
             make.leading.equalTo(contentView.snp.leading).offset(8)
             make.top.equalTo(idTextView.snp.bottom).offset(8)
@@ -134,6 +140,7 @@ class JSONItemCell: UICollectionViewCell {
             make.top.equalTo(idTextView.snp.bottom).offset(8)
         }
         
+        // constraints for data
         dataHeader.snp.makeConstraints { (make) in
             make.leading.equalTo(contentView.snp.leading).offset(8)
             make.top.equalTo(dateHeader.snp.bottom).offset(8)

@@ -8,6 +8,7 @@
 import Foundation
 
 struct JSONItem: Decodable {
+    // MARK: - Properties
     let id: String
     let type: String
     let date: String?

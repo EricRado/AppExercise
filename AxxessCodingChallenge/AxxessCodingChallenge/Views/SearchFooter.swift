@@ -8,6 +8,7 @@
 import UIKit
 
 class SearchFooter: UIView {
+    // MARK: - Instance Variables
     static let identifier = "SearchFooter"
     private let label: UILabel = {
         let label = UILabel()
@@ -15,6 +16,7 @@ class SearchFooter: UIView {
         label.textAlignment = .center
         label.backgroundColor = Constants.pinkColor
         label.textColor = UIColor.white
+        label.font = UIFont.boldSystemFont(ofSize: 20)
         return label
     }()
     

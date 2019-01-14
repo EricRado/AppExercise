@@ -8,6 +8,8 @@
 import UIKit
 
 public class Constants {
+    static let jsonFileName = "challenge.json"
+    
     static let screenWidth = UIScreen.main.bounds.width
     static let screenHeight = UIScreen.main.bounds.height
     
@@ -16,10 +18,17 @@ public class Constants {
     static let category2 = "Text"
     static let category3 = "Other"
     
+    static let typeText = "text"
+    static let typeOther = "other"
+    static let typeImage = "image"
+    
     static let pinkColor = UIColor(red: 1, green: 91/255, blue: 108/255, alpha: 100)
     
+    static let idLabelTitle = "ID :"
     static let typeLabelTitle = "Type :"
     static let dateLabelTitle = "Date :"
     static let dataLabelTitle = "Data"
+    
+    static let imageNotFound = "imageNotFound"
 }
 

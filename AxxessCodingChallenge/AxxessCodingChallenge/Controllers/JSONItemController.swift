@@ -10,7 +10,7 @@ import Alamofire
 import SnapKit
 
 class JSONItemController: UIViewController {
-    private let jsonFileName = "challenge.json"
+    // MARK: - Instance Variables
     private let downloadInProgressView: DownloadInProgressView = {
         let dipView = DownloadInProgressView()
         dipView.translatesAutoresizingMaskIntoConstraints = false
@@ -33,6 +33,8 @@ class JSONItemController: UIViewController {
         return footer
     }()
     
+    private let searchFooterHeightMultipler: CGFloat = 0.06
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -54,7 +56,8 @@ class JSONItemController: UIViewController {
         sc.searchBar.placeholder = "Search by Id"
         return sc
     }()
-
+    
+    // MARK: - View Controller's lifecycle methods
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -65,7 +68,11 @@ class JSONItemController: UIViewController {
         definesPresentationContext = true
         
         // setup the scope bar
-        searchController.searchBar.scopeButtonTitles = [Constants.categoryAll, Constants.category1, Constants.category2, Constants.category3]
+        searchController.searchBar.scopeButtonTitles = [
+            Constants.categoryAll,
+            Constants.category1,
+            Constants.category2,
+            Constants.category3]
         searchController.searchBar.delegate = self
         
         // retrieve json data from url
@@ -103,13 +110,14 @@ class JSONItemController: UIViewController {
     }
 
     private func downloadJSON(completion: @escaping (([JSONItem]?) -> Void)) {
-        Alamofire.request(Router.master(jsonFileName)).responseJSON { (response) in
+        Alamofire.request(Router.master(Constants.jsonFileName)).responseJSON { (response) in
             guard response.result.isSuccess, let data = response.data else {
                 print("Unable to retrieve json file")
                 completion(nil)
                 return
             }
             
+            // parse the json to JSONItem objects
             do {
                 let items = try JSONDecoder().decode([JSONItem].self, from: data)
                 completion(items)
@@ -121,8 +129,10 @@ class JSONItemController: UIViewController {
         }
     }
     
+    // MARK: - Search bar and scope methods
     private func filterContentForSearchText(_ searchText: String,
         scope: String=Constants.categoryAll) {
+        // apply the selected scope filter to JSONItem array
         filteredJsonItems = jsonItems.filter({ (item: JSONItem) -> Bool in
             let doesCategoryMatch = (scope == Constants.categoryAll) ||
                 (item.type == scope.lowercased())
@@ -143,6 +153,7 @@ class JSONItemController: UIViewController {
     }
     
     private func isFiltering() -> Bool {
+        // if the selected scope is not 'all' display searchFooter
         let searchBarScopeIsFiltering = searchController.searchBar.selectedScopeButtonIndex != 0
         if searchBarScopeIsFiltering {
             showSearchFooter()
@@ -157,10 +168,8 @@ extension JSONItemController {
     private func showSearchFooter() {
         view.addSubview(searchFooter)
         searchFooter.snp.makeConstraints { [unowned self] (make) in
-            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading)
-            make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
-            make.height.equalTo(50)
+            make.leading.trailing.bottom.equalTo(self.view.safeAreaLayoutGuide)
+            make.height.equalTo(Constants.screenHeight * searchFooterHeightMultipler)
         }
         
         collectionViewBottomConstraint?.deactivate()
@@ -171,7 +180,6 @@ extension JSONItemController {
     }
     
     private func hideSearchFooter() {
-        searchFooter.removeFromSuperview()
         collectionViewBottomConstraint?.deactivate()
         collectionView.snp.makeConstraints { [unowned self] (make) in
             self.collectionViewBottomConstraint = make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
@@ -215,7 +223,8 @@ extension JSONItemController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: JSONItemCell.identifier, for: indexPath) as? JSONItemCell else {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: JSONItemCell.identifier, for: indexPath) as? JSONItemCell else {
             return UICollectionViewCell()
         }
         
@@ -233,11 +242,13 @@ extension JSONItemController: UICollectionViewDataSource {
 }
 
 extension JSONItemController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: Constants.screenWidth - 16, height: 170)
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: Constants.screenWidth - 16, height: collectionView.frame.size.height / 5.0)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
     }
 }
