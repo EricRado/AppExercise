@@ -157,9 +157,8 @@ class JSONItemController: UIViewController {
         let searchBarScopeIsFiltering = searchController.searchBar.selectedScopeButtonIndex != 0
         if searchBarScopeIsFiltering {
             showSearchFooter()
-        } else {
-            hideSearchFooter()
         }
+        
         return searchController.isActive && (!searchBarIsEmpty() || searchBarScopeIsFiltering)
     }
 }
@@ -170,20 +169,6 @@ extension JSONItemController {
         searchFooter.snp.makeConstraints { [unowned self] (make) in
             make.leading.trailing.bottom.equalTo(self.view.safeAreaLayoutGuide)
             make.height.equalTo(Constants.screenHeight * searchFooterHeightMultipler)
-        }
-        
-        collectionViewBottomConstraint?.deactivate()
-        collectionView.snp.makeConstraints({ [unowned self] (make) in
-            self.collectionViewBottomConstraint = make.bottom.equalTo(self.searchFooter.snp.top).constraint
-        })
-        
-    }
-    
-    private func hideSearchFooter() {
-        collectionViewBottomConstraint?.deactivate()
-        collectionView.snp.makeConstraints { [unowned self] (make) in
-            self.collectionViewBottomConstraint = make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
-                .constraint
         }
     }
 }
