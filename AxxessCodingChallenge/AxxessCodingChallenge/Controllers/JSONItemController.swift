@@ -27,18 +27,26 @@ class JSONItemController: UIViewController {
         return arr
     }()
     
+    private lazy var searchFooter: SearchFooter = {
+        var footer = SearchFooter()
+        footer.translatesAutoresizingMaskIntoConstraints = false
+        return footer
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         
         var cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.backgroundColor = UIColor.white
         cv.register(JSONItemCell.self,
                     forCellWithReuseIdentifier: JSONItemCell.identifier)
-        cv.backgroundColor = UIColor.green
         cv.dataSource = self
         cv.delegate = self
         return cv
     }()
+    
+    private var collectionViewBottomConstraint: Constraint?
     
     let searchController: UISearchController = {
         let sc = UISearchController(searchResultsController: nil)
@@ -71,19 +79,19 @@ class JSONItemController: UIViewController {
             
             self.jsonItems = items
             self.collectionView.reloadData()
-            print(items)
         }
     }
     
     private func setupView() {
+        view.backgroundColor = UIColor.white
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { (make) in
             make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading)
             make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing)
             make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+            self.collectionViewBottomConstraint = make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+                .constraint
         }
-        view.backgroundColor = UIColor.white
         navigationItem.title = "Data"
     }
     
@@ -136,20 +144,72 @@ class JSONItemController: UIViewController {
     
     private func isFiltering() -> Bool {
         let searchBarScopeIsFiltering = searchController.searchBar.selectedScopeButtonIndex != 0
+        if searchBarScopeIsFiltering {
+            showSearchFooter()
+        } else {
+            hideSearchFooter()
+        }
         return searchController.isActive && (searchBarIsEmpty() || searchBarScopeIsFiltering)
     }
 }
 
-extension JSONItemController: UICollectionViewDelegate {
+extension JSONItemController {
+    private func showSearchFooter() {
+        view.addSubview(searchFooter)
+        searchFooter.snp.makeConstraints { [unowned self] (make) in
+            make.leading.equalTo(self.view.safeAreaLayoutGuide.snp.leading)
+            make.trailing.equalTo(self.view.safeAreaLayoutGuide.snp.trailing)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+            make.height.equalTo(50)
+        }
+        
+        collectionViewBottomConstraint?.deactivate()
+        collectionView.snp.makeConstraints({ [unowned self] (make) in
+            self.collectionViewBottomConstraint = make.bottom.equalTo(self.searchFooter.snp.top).constraint
+        })
+        
+    }
     
+    private func hideSearchFooter() {
+        searchFooter.removeFromSuperview()
+        collectionViewBottomConstraint?.deactivate()
+        collectionView.snp.makeConstraints { [unowned self] (make) in
+            self.collectionViewBottomConstraint = make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+                .constraint
+        }
+    }
+}
+
+extension JSONItemController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item: JSONItem
+        
+        if isFiltering() {
+            item = filteredJsonItems[indexPath.item]
+        } else {
+            item = jsonItems[indexPath.item]
+        }
+        
+        // transfer selected object to Detail Controller through method injection
+        let vc = JSONItemDetailController()
+        vc.setJSONItem(item)
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 extension JSONItemController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         if isFiltering() {
+            searchFooter.setIsFilteringToShow(filteredItemCount: filteredJsonItems.count, of: jsonItems.count)
             return filteredJsonItems.count
         }
+        
+        searchFooter.setNotFiltering()
         return jsonItems.count
     }
     
@@ -161,9 +221,9 @@ extension JSONItemController: UICollectionViewDataSource {
         
         let item: JSONItem
         if isFiltering() {
-            item = filteredJsonItems[indexPath.row]
+            item = filteredJsonItems[indexPath.item]
         } else {
-            item = jsonItems[indexPath.row]
+            item = jsonItems[indexPath.item]
         }
         
         cell.populate(item: item)

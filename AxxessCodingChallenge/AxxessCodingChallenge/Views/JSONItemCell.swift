@@ -64,6 +64,7 @@ class JSONItemCell: UICollectionViewCell {
     }
     
     private func setupView() {
+        contentView.backgroundColor = UIColor.white
         contentView.layer.borderColor = UIColor.gray.cgColor
         contentView.layer.borderWidth = 2.0
         contentView.layer.shadowColor = UIColor.gray.cgColor
