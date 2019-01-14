@@ -109,7 +109,7 @@ class JSONItemController: UIViewController {
                 completion(nil)
                 return
             }
-            print(response)
+            
             do {
                 let items = try JSONDecoder().decode([JSONItem].self, from: data)
                 completion(items)
@@ -234,7 +234,7 @@ extension JSONItemController: UICollectionViewDataSource {
 
 extension JSONItemController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: Constants.screenWidth, height: 120)
+        return CGSize(width: Constants.screenWidth - 16, height: 170)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

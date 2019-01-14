@@ -17,5 +17,9 @@ public class Constants {
     static let category3 = "Other"
     
     static let pinkColor = UIColor(red: 1, green: 91/255, blue: 108/255, alpha: 100)
+    
+    static let typeLabelTitle = "Type :"
+    static let dateLabelTitle = "Date :"
+    static let dataLabelTitle = "Data"
 }
 
