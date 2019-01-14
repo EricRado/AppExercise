@@ -160,7 +160,7 @@ class JSONItemController: UIViewController {
         } else {
             hideSearchFooter()
         }
-        return searchController.isActive && (searchBarIsEmpty() || searchBarScopeIsFiltering)
+        return searchController.isActive && (!searchBarIsEmpty() || searchBarScopeIsFiltering)
     }
 }
 
